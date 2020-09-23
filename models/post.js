@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 const {ObjectId} = mongoose.Schema 
 
 const postSchema = new mongoose.Schema({
-    username:{
+    postedBy:{
         type: ObjectId,
         ref:"User"
     },
     photo:{
-        data:Buffer,
-        contentType:String
+        type: String,
+        default:"NO PHOTO"
     },
     description:{
         type:String,
