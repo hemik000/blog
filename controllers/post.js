@@ -15,6 +15,7 @@ exports.getPostById = (req,res,next,id) => {
             })
         }
         req.post = post
+        next()
     })
 }
 
@@ -76,20 +77,31 @@ exports.getAllPosts = (req, res) => {
 }
 
 exports.deletePost = (req, res) => {
-  let post = Post.findById(id)
-  post.remove((err, deletePost)=>{
-    if(err){
+  let post = req.post
+  post.remove((err, post)=>{
+    if(err || !post){
       return res.status(400).json({
         error:"Failed to delete post"
       })
     }
     res.json({
-      message: "Post deleted",
-      deletePost
+      message:"Post deleted",
+      post
     })
   })
 }
 
 exports.updatePost = (req, res) => {
 
+  const post = req.post;
+  post.description = req.body.description;
+
+  post.save((err, updatedPost) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Failed to update post"
+      });
+    }
+    res.json(updatedPost);
+  });
 }

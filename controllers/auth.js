@@ -13,19 +13,27 @@ exports.signup = (req, res) => {
   }
 
   const user = new User(req.body);
-  const username = User.findOne({ username: user.username})
   user.save((err, user) => {
     if (err) {
       return res.status(400).json({
         err: "NOT able to save user in DB"
       });
     }
+
+    const existingUsers = User.find({name})
+  if (existingUsers){
+    return res.status(400).json({
+      error:"User already exists"
+    })
+  }
     
     res.json({
       name: user.username,
       id: user._id
     });
   });
+
+  
 };
 
 exports.signin = (req, res) => {
@@ -41,13 +49,13 @@ exports.signin = (req, res) => {
   User.findOne({ username }, (err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "USER email does not exists"
+        error: "USER does not exists"
       });
     }
 
     if (!user.autheticate(password)) {
       return res.status(401).json({
-        error: "Email and password do not match"
+        error: "Username and password do not match"
       });
     }
     
