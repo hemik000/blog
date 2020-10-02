@@ -11,8 +11,8 @@ exports.signup = (req, res) => {
       error: errors.array()[0].msg
     });
   }
-
-  const existingUsers = User.find({name})
+  const { username } = req.body;
+  const existingUsers = User.find({username})
   if (existingUsers){
     return res.status(400).json({
       error:"User already exists"
