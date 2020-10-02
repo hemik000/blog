@@ -12,19 +12,19 @@ exports.signup = (req, res) => {
     });
   }
 
-  const user = new User(req.body);
-  user.save((err, user) => {
-    if (err) {
-      return res.status(400).json({
-        err: "NOT able to save user in DB"
-      });
-    }
-
-    const existingUsers = User.find({name})
+  const existingUsers = User.find({name})
   if (existingUsers){
     return res.status(400).json({
       error:"User already exists"
     })
+  } else {
+    const user = new User(req.body);
+    user.save((err, user) => {
+      if (err) {
+        return res.status(400).json({
+          err: "NOT able to save user in DB"
+        });
+      }
   }
     
     res.json({
